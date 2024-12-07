@@ -1,21 +1,21 @@
-def remove_duplicates_from_file(input_file, output_file):
-    try:
-        # Mở file đọc dữ liệu
-        with open(input_file, 'r', encoding='utf-8') as file:
-            lines = file.readlines()
-        
-        # Loại bỏ các dòng trùng lặp bằng cách dùng set
-        unique_lines = set(line.strip() for line in lines)
-        
-        # Ghi kết quả vào file mới
-        with open(output_file, 'w', encoding='utf-8') as file:
-            for line in sorted(unique_lines):  # Sắp xếp nếu cần
-                file.write(line + '\n')
-        
-        print(f"Đã loại bỏ các phần trùng lặp. Kết quả được lưu tại: {output_file}")
-    except Exception as e:
-        print(f"Có lỗi xảy ra: {e}")
+import pandas as pd
+from openpyxl import load_workbook
 
-# Sử dụng hàm
-remove_duplicates_from_file('input.txt', 'output.txt')
+# read the file Excel
+workbook = load_workbook(filename="Drug (1).xlsx")
+sheet = workbook.active  # Chọn sheet làm việc mặc định
+
+# read data from sheet to DataFrame
+data = pd.DataFrame(sheet.values)
+
+df = pd.read_excel("Drug (1).xlsx")
+
+# filter duplicated datas of 4 collums of reviews, efective, ease of use, Satisfaction 
+df = df.drop_duplicates(subset=['Reviews', 'Effective', 'EaseOfUse', 'Satisfaction'])
+
+# display DataFrame after deleting duplicated rows
+print(df)
+
+# save the excel file(optional)
+df.to_excel("Drug_cleaned.xlsx", index=False)
 
